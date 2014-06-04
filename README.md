@@ -1,4 +1,3 @@
-scala-js-dojo-example
-=====================
+An example project using scala-js-dojo
 
-An example project using ScalaJS Dojo bindings
+EXPERIMENTAL - not useful for much yet

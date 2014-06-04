@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Example Scala.js application</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <script>
+  dojoConfig= {
+    async: true, 
+    packages: [
+      {
+        name: 'dgrid',
+        location: location.pathname.replace(/\/[^/]+$/, '') + '/js/dgrid'
+      },
+      {
+        name: 'xstyle',
+        location: location.pathname.replace(/\/[^/]+$/, '') + '/js/xstyle'
+      },
+      {
+        name: 'put-selector',
+        location: location.pathname.replace(/\/[^/]+$/, '') + '/js/put-selector'
+      }
+    ]
+  };
+</script>
+  <script src="http://ajax.googleapis.com/ajax/libs/dojo/1.9.3/dojo/dojo.js"></script>
+</head>
+<body>
+
+<h1>Dojo Scala.js application - development version</h1>
+
+<p>After having compiled and packaged properly the code for the application
+(using `sbt packageJS`), you should see "It works" herebelow.
+See README.md for detailed explanations.</p>
+
+<div id="playground">
+</div>
+
+<hr/>
+ <div id="grid2"></div>
+
+<script type="text/javascript" src="./target/scala-2.11/example-extdeps.js"></script>
+<script type="text/javascript" src="./target/scala-2.11/example-intdeps.js"></script>
+<script type="text/javascript" src="./target/scala-2.11/example.js"></script>
+
+<script type="text/javascript">
+ScalaJSExample().main();
+</script>
+
+
+</body>
+</html>
