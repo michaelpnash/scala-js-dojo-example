@@ -11,4 +11,3 @@ libraryDependencies ++= Seq(
     "org.scala-lang.modules.scalajs" %% "scalajs-jasmine-test-framework" % scalaJSVersion % "test",
     "org.scala-lang.modules.scalajs" %% "scalajs-dom" % "0.4"
 )
-k
