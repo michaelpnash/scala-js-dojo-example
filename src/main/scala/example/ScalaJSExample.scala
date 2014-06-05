@@ -5,22 +5,27 @@ import js.annotation.JSExport
 import org.scalajs.dom
 import org.scalajs.dom.HTMLElement
 import scala.scalajs.js.annotation.JSName
-import js.Dynamic.{ global => g, newInstance => jsnew }
+import js.Dynamic.{ global => g, newInstance => jsnew, literal => lit }
 
 class Grid(id: String) {
-   var wrapped: js.Dynamic = null
+   def columns(field1: String, label1: String) = Array(lit("field" -> field1, "label" -> label1))
+   def columns(field1: String, label1: String, field2: String, label2: String) =
+     Array(lit("field" -> field1, "label" -> label1), lit("field" -> field2, "label" -> label2))
+   def columns(field1: String, label1: String, field2: String, label2: String, field3: String, label3: String) =
+     Array(lit("field" -> field1, "label" -> label1), lit("field" -> field2, "label" -> label2), lit("field" -> field3, "label" -> label3))
+   private var wrapped: js.Dynamic = null
 
    g.require(Array[String]("dgrid/Grid", "dojo/domReady!"), { (grid: js.Dynamic) =>
+
       val data = Array(
         js.Dynamic.literal(first = "Fred", last = "Barkers", age = 89),
         js.Dynamic.literal(first = "Vanna", last = "Blue", age = 55),
         js.Dynamic.literal(first = "Pat", last = "Sajak", age = 65)
       )
-s
-      val gridCall = js.Dynamic.literal(columns = js.Dynamic.literal(first = "First Name", last = "Last Name", age = "Age"))
 
-      val g = jsnew(grid)(gridCall, id)
+      val cols = lit("columns" -> columns("first", "First Name", "last", "Last Name", "age", "Age"))
 
+      val g = jsnew(grid)(cols, id)
       g.renderArray(data)
       wrapped = g
     })
