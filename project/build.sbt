@@ -1,4 +1,4 @@
-addSbtPlugin("org.scala-lang.modules.scalajs" % "scalajs-sbt-plugin" % "0.4.4")
+addSbtPlugin("org.scala-lang.modules.scalajs" % "scalajs-sbt-plugin" % "0.5.0-SNAPSHOT")
 
 resolvers += "sbt-idea-repo" at "http://mpeltonen.github.com/maven/"
 
