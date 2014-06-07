@@ -78,15 +78,23 @@ object ScalaJSExample {
     val apple = jsnew(g.Apple)("type", "red")
     val a = apple.asInstanceOf[Apple]
 
-    dom.alert(a.color);
+    dom.alert(a.color)
 
-   g.require(Array[String]("dijit/layout/BorderContainer", "dijit/layout/ContentPane", "dojo/domReady!"), { (borderContainer: js.Dynamic, contentPane: js.Dynamic) =>
+    val bc = dom.document.createElement("div")
+    bc.id = "bordercontainer"
+    dom.document.body.appendChild(bc)
+
+   g.require(Array[String]("dijit/layout/BorderContainer", "dijit/layout/ContentPane",
+     "dojo/domReady!"), { (borderContainer: js.Dynamic, contentPane: js.Dynamic) =>
       val cont1 = jsnew(borderContainer)({}, "bordercontainer")
-      cont1.startup()
+      val pp = dom.document.createElement("p")
+      pp.innerHTML = "testing, testing"
+      cont1.domNode.appendChild(pp)
 
     val top = jsnew(contentPane)()
     top.region = "top"
     cont1.addChild(top)
+     cont1.startup()
    })
 
     grid2()
