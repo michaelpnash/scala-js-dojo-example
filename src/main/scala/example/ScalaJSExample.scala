@@ -110,13 +110,11 @@ object ScalaJSExample {
         lit(first = "Pat", last = "Sajak", age = 65)
       )
 
-    //{ first : "First Name", last : "Last Name"}
-
-      val cols = Array(ColumnDef("first", "First Name"), ColumnDef("last", "Last Name"), ColumnDef("age", "Age"))
-      val cd = Columns(cols)
+      val cols = Array(new ColumnDef("first", "First Name"), new ColumnDef("last", "Last Name"), new ColumnDef("age", "Age"))
+      val cd = new Columns(cols)
       val gridCall = js.Dynamic.literal(columns = js.Dynamic.literal(first = "First Name", last = "Last Name", age = "Age"))
 
-      val g = jsnew(grid)(gridCall, "grid2")
+      val g = new OnDemandGrid(cd, "grid2")
 
       g.renderArray(data)
     })
@@ -128,5 +126,22 @@ object ScalaJSExample {
   def square(x: Int): Int = x*x
 }
 
-case class ColumnDef(field: String, label: String)
-case class Columns(columns: Array[ColumnDef])
+@JSExport
+class ColumnDef(_field: String, _label: String) {
+  @JSExport("field")
+  def field: String = _field
+  @JSExport("label")
+  def label: String = _label
+}
+
+@JSExport
+class Columns(_columns: Array[ColumnDef]) {
+  def columns: Array[ColumnDef] = _columns
+}
+
+@JSName("dgrid.OnDemandGrid")
+class OnDemandGrid(columns: Columns, id: String) extends js.Object {
+  def renderArray(data: Any) = ???
+}
+
+
