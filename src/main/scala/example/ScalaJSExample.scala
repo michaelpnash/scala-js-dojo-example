@@ -16,6 +16,14 @@ trait Apple extends js.Object {
 @JSName("THREE.Scene")
 class ThreeScene
 
+@JSName("BorderContainer")
+trait BorderContainer extends js.Object {
+}
+
+@JSName("ContentPane")
+trait ContentPane extends js.Object {
+  var region: String = ???
+}
 
 class Grid(id: String, columns: List[(String, String)]) {
    def columns(field1: String, label1: String) = Array(lit("field" -> field1, "label" -> label1))
@@ -71,6 +79,15 @@ object ScalaJSExample {
     val a = apple.asInstanceOf[Apple]
 
     dom.alert(a.color);
+
+   g.require(Array[String]("dijit/layout/BorderContainer", "dijit/layout/ContentPane", "dojo/domReady!"), { (borderContainer: js.Dynamic, contentPane: js.Dynamic) =>
+      val cont1 = jsnew(borderContainer)({}, "bordercontainer")
+      cont1.startup()
+
+    val top = jsnew(contentPane)()
+    top.region = "top"
+    cont1.addChild(top)
+   })
 
     grid2()
 
