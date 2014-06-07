@@ -99,19 +99,21 @@ object ScalaJSExample {
 
     grid2()
 
-    //new Grid("foo")
   }
 
   def grid2() {
     g.require(Array[String]("dgrid/Grid", "dojo/domReady!"), { (grid: js.Dynamic) =>
+      val dat = Array(Map("first" -> "Fred", "last" -> "Barker", "age" -> 89))
       val data = Array(
-        lit(first = "Fred", last = "Barkers", age = 89),
-        js.Dynamic.literal(first = "Vanna", last = "Blue", age = 55),
-        js.Dynamic.literal(first = "Pat", last = "Sajak", age = 65)
+        lit("first" -> "Fred", "last" -> "Barkers", "age" -> 89),
+        lit(first = "Vanna", last = "Blue", age = 55),
+        lit(first = "Pat", last = "Sajak", age = 65)
       )
 
     //{ first : "First Name", last : "Last Name"}
 
+      val cols = Array(ColumnDef("first", "First Name"), ColumnDef("last", "Last Name"), ColumnDef("age", "Age"))
+      val cd = Columns(cols)
       val gridCall = js.Dynamic.literal(columns = js.Dynamic.literal(first = "First Name", last = "Last Name", age = "Age"))
 
       val g = jsnew(grid)(gridCall, "grid2")
@@ -125,3 +127,6 @@ object ScalaJSExample {
    */
   def square(x: Int): Int = x*x
 }
+
+case class ColumnDef(field: String, label: String)
+case class Columns(columns: Array[ColumnDef])
