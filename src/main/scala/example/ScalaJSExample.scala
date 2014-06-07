@@ -8,7 +8,7 @@ import scala.scalajs.js.annotation.JSName
 import js.Dynamic.{ global => g, newInstance => jsnew, literal => lit }
 
 @JSName("Apple")
-class Apple extends js.Object {
+trait Apple extends js.Object {
   val `type`: String = ???
   val color: String = ???
 }
@@ -67,7 +67,10 @@ object ScalaJSExample {
 
     dom.alert("Here")
 
-    //dom.alert(x.color)
+    val apple = jsnew(g.Apple)("type", "red")
+    val a = apple.asInstanceOf[Apple]
+
+    dom.alert(a.color);
 
     grid2()
 
