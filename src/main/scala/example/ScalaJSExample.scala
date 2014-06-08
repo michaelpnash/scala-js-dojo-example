@@ -43,25 +43,6 @@ object OnDemandGrid {
 
 }
 
-case class Grid(id: String, columns: List[ColumnDef])(implicit grid: js.Dynamic) {
-  private var wrapped: js.Dynamic = null
-
-      val cols = js.Dictionary("columns" -> js.Dictionary(columns.map(col => (col.fieldName, col.title)): _*))
-      val gr = jsnew(grid)(cols, id)
-
-      wrapped = gr
-
-  def renderArray(data: List[Map[String, Any]]) = {
-
-    val records: Seq[js.Dictionary[Any]] = data.map { m =>
-      js.Dictionary[Any](m.map(p => (p._1 -> p._2)).toSeq : _*)
-    }.toSeq
-    val rows = js.Array(records: _*)
-
-     wrapped.renderArray(rows)
-  }
-}
-
 case class ColumnDef(fieldName: String, title: String)
 
 @JSExport
