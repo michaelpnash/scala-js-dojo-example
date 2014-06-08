@@ -9,34 +9,47 @@ import js.Dynamic.{global => g, newInstance => jsnew, literal => lit}
 @JSName("THREE.Scene")
 class ThreeScene
 
+@JSName("Grid")
 trait OnDemandGrid extends js.Object {
-  def renderArray(data: Any) = ???
-}
+  def renderArray(data: js.Object): Any = ???
 
-case class Grid(id: String, columns: List[ColumnDef])(implicit grid: js.Dynamic) {
-  private var wrapped: js.Dynamic = null
+  def save(): Unit = ???
 
-      //val rows = js.Array(js.Dictionary("first" -> "Fred", "last" -> "Barking", "age" -> 89),
-      //  js.Dictionary("first" -> "Vanna", "last" -> "Green", "age" -> 55))
+  def revert(): Unit = ???
 
-      val cols = js.Dictionary("columns" -> js.Dictionary(columns.map(col => (col.fieldName, col.title)): _*))
-      val gr = jsnew(grid)(cols, id)
-      //gr.renderArray(rows)
-      wrapped = gr
+  val id: String = ???
 
-  def renderArray(data: List[Map[String, Any]]) = {
-    require(wrapped != null)
-    //val records = data.map(m => m.map(pair => (pair._1, pair._2)))
-
-    //val rows = js.Array(records: _*)
+  def data(data: List[Map[String, Any]]): js.Object = {
 
     val records: Seq[js.Dictionary[Any]] = data.map { m =>
       js.Dictionary[Any](m.map(p => (p._1 -> p._2)).toSeq : _*)
     }.toSeq
     val rows = js.Array(records: _*)
 
-    val rows2 = js.Array(js.Dictionary("first" -> "Fred", "last" -> "Barking", "age" -> 89),
-        js.Dictionary("first" -> "Vanna", "last" -> "Green", "age" -> 55))
+    rows
+  }
+}
+
+object OnDemandGrid {
+  def apply(id: String, columns: List[ColumnDef])(implicit grid: js.Dynamic) =
+    jsnew(grid)(js.Dictionary("columns" -> js.Dictionary(columns.map(col => (col.fieldName, col.title)): _*)), id).asInstanceOf[OnDemandGrid]
+
+}
+
+case class Grid(id: String, columns: List[ColumnDef])(implicit grid: js.Dynamic) {
+  private var wrapped: js.Dynamic = null
+
+      val cols = js.Dictionary("columns" -> js.Dictionary(columns.map(col => (col.fieldName, col.title)): _*))
+      val gr = jsnew(grid)(cols, id)
+
+      wrapped = gr
+
+  def renderArray(data: List[Map[String, Any]]) = {
+
+    val records: Seq[js.Dictionary[Any]] = data.map { m =>
+      js.Dictionary[Any](m.map(p => (p._1 -> p._2)).toSeq : _*)
+    }.toSeq
+    val rows = js.Array(records: _*)
 
      wrapped.renderArray(rows)
   }
@@ -61,8 +74,6 @@ object ScalaJSExample {
         elem.innerHTML = s"Here is $i"
         playground.appendChild(elem)
     }
-
-    val x = jsnew(g.Date)()
 
     val scene = (new ThreeScene).asInstanceOf[js.Dynamic]
 
@@ -89,9 +100,25 @@ object ScalaJSExample {
 
     g.require(Array[String]("dgrid/Grid", "dojo/domReady!"), {
       (grid: js.Dynamic) =>
-        val gr = Grid("grid2", List(ColumnDef("first", "First Name"), ColumnDef("last", "Last Name"), ColumnDef("age", "Age")))(grid)
-        gr.renderArray(List(Map("first" -> "Fred", "last" -> "Barkingdog", "age" -> 89),
-          Map("first" -> "Vanna", "last" -> "Green", "age" -> 55)))
+//        val gr = Grid("grid2", List(ColumnDef("first", "First Name"), ColumnDef("last", "Last Name"), ColumnDef("age", "Age")))(grid)
+//        gr.renderArray(List(Map("first" -> "Fred", "last" -> "Barkingdog", "age" -> 89),
+//          Map("first" -> "Vanna", "last" -> "Green", "age" -> 55)))
+
+        val odg = OnDemandGrid("grid3", List(ColumnDef("name", "Name"), ColumnDef("rank", "Rank"), ColumnDef("serial", "Serial Number")))(grid)
+
+
+      val data = Array(
+        js.Dynamic.literal(name = "Fred", rank = "Barkers", serial = 89),
+        js.Dynamic.literal(name = "Vanna", rank = "Blue", serial = 55),
+        js.Dynamic.literal(name = "Pat", rank = "Sajak", serial = 65)
+      )
+
+      odg.renderArray(data)
+//        odg.renderArray(List(Map("name" -> "Fred Jones", "rank" -> "Corporal", "serial" -> 123),
+//          Map("name" -> "Grace Hopper", "rank" -> "Admiral", "serial" -> 111)))
+////        odg.renderArray(odg.data(List(Map("first" -> "Fred", "last" -> "Barkingdog", "age" -> 89),
+////          Map("first" -> "Vanna", "last" -> "Green", "age" -> 55))))
+        g.console.log(odg.id)
     })
 
   }
