@@ -4,30 +4,47 @@ import scala.scalajs.js
 import js.annotation.JSExport
 import org.scalajs.dom
 import scala.scalajs.js.annotation.JSName
-import js.Dynamic.{ global => g, newInstance => jsnew, literal => lit }
+import js.Dynamic.{global => g, newInstance => jsnew, literal => lit}
 
 @JSName("THREE.Scene")
 class ThreeScene
 
+trait OnDemandGrid extends js.Object {
+  def renderArray(data: Any) = ???
+}
 
-
-class Grid(id: String, columns: List[(String, String)]) {
-    g.require(Array[String]("dgrid/Grid", "dojo/domReady!"), { (grid: js.Dynamic) =>
+case class Grid(id: String, columns: List[ColumnDef]) {
+  private var wrapped: OnDemandGrid = null
+  g.require(Array[String]("dgrid/Grid", "dojo/domReady!"), {
+    (grid: js.Dynamic, ready: js.Dynamic) =>
 
       val rows = js.Array(js.Dictionary("first" -> "Fred", "last" -> "Barking", "age" -> 89),
         js.Dictionary("first" -> "Vanna", "last" -> "Green", "age" -> 55))
 
-      val cols = js.Dictionary("columns" -> js.Dictionary("first" -> "First Name", "last" -> "Last Name", "age" -> "Age"))
-
-      g.console.log(rows)
-
-      val gr = jsnew(grid)(cols, "grid2")
-
-    gr.columns = cols
+      val cols = js.Dictionary("columns" -> js.Dictionary(columns.map(col => (col.fieldName, col.title)): _*))
+      val gr = jsnew(grid)(cols, id)
       gr.renderArray(rows)
-    })
-    def renderArray(data: List[(String, String)]) = ???
+
+      ready({
+        dom.alert("Ready!")
+        wrapped = gr.asInstanceOf[OnDemandGrid]
+      })
+  })
+
+  def renderArray(data: List[Map[String, Any]]) = {
+    require(wrapped != null)
+    val records = data.map(m => m.map(pair => (pair._1, pair._2)))
+
+    val rows = js.Array(records: _*)
+
+    g.console.log(wrapped)
+     val rows2 = js.Array(js.Dictionary("first" -> "Fred", "last" -> "Barking", "age" -> 89),
+        js.Dictionary("first" -> "Vanna", "last" -> "Green", "age" -> 55))
+    wrapped.renderArray(rows2)
+  }
 }
+
+case class ColumnDef(fieldName: String, title: String)
 
 @JSExport
 object ScalaJSExample {
@@ -40,10 +57,11 @@ object ScalaJSExample {
     val pp = dom.document.createElement("p")
 
     val playground = g.document.getElementById("playground")
-    List(1, 2, 3).foreach { i => 
-      val elem = g.document.createElement("p")
-      elem.innerHTML = s"Here is $i"
-      playground.appendChild(elem)
+    List(1, 2, 3).foreach {
+      i =>
+        val elem = g.document.createElement("p")
+        elem.innerHTML = s"Here is $i"
+        playground.appendChild(elem)
     }
 
     val x = jsnew(g.Date)()
@@ -52,60 +70,31 @@ object ScalaJSExample {
 
     val threeS = scene.asInstanceOf[ThreeScene]
 
-   // dom.alert("Here")
-
+    // dom.alert("Here")
 
 
     val bc = dom.document.createElement("div")
     bc.id = "bordercontainer"
     dom.document.body.appendChild(bc)
 
-   g.require(Array[String]("dijit/layout/BorderContainer", "dijit/layout/ContentPane",
-     "dojo/domReady!"), { (borderContainer: js.Dynamic, contentPane: js.Dynamic) =>
-      val cont1 = jsnew(borderContainer)({}, "bordercontainer")
-      val pp = dom.document.createElement("p")
-      pp.innerHTML = "testing, testing"
-      cont1.domNode.appendChild(pp)
+    g.require(Array[String]("dijit/layout/BorderContainer", "dijit/layout/ContentPane",
+      "dojo/domReady!"), {
+      (borderContainer: js.Dynamic, contentPane: js.Dynamic) =>
+        val cont1 = jsnew(borderContainer)({}, "bordercontainer")
+        val pp = dom.document.createElement("p")
+        pp.innerHTML = "testing, testing"
+        cont1.domNode.appendChild(pp)
 
-    val top = jsnew(contentPane)()
-    top.region = "top"
-    cont1.addChild(top)
-     cont1.startup()
-   })
+        val top = jsnew(contentPane)()
+        top.region = "top"
+        cont1.addChild(top)
+        cont1.startup()
+    })
 
-    new Grid("foo", null)
-    //grid2()
+    val gr = Grid("grid2", List(ColumnDef("first", "First Name"), ColumnDef("last", "Last Name"), ColumnDef("age", "Age")))
+    gr.renderArray(List(Map("first" -> "Fred", "last" -> "Barking", "age" -> 89),
+        Map("first" -> "Vanna", "last" -> "Green", "age" -> 55)))
 
   }
-
-//  def grid2() {
-//    g.require(Array[String]("dgrid/Grid", "dojo/domReady!"), { (grid: js.Dynamic) =>
-//      val dat = Array(Map("first" -> "Fred", "last" -> "Barker", "age" -> 89))
-//      val data = Array(
-//        lit("first" -> "Fred", "last" -> "Barkers", "age" -> 89),
-//        lit(first = "Vanna", last = "Blue", age = 55),
-//        lit(first = "Pat", last = "Sajak", age = 65)
-//      )
-//
-//    val row = Array(js.Dictionary("first" -> "Fred", "last" -> "Barking", "age" -> 89))
-//
-//      val cols = Array(new ColumnDef("first", "First Name"), new ColumnDef("last", "Last Name"), new ColumnDef("age", "Age"))
-//      val cd = (new Columns(cols)).asInstanceOf[js.Dynamic]
-//      val gridCall = lit(columns = lit(first = "First Name", last = "Last Name", age = "Age"))
-//
-//      val gr = jsnew(grid)(gridCall, "grid2")
-//      gr.renderArray(row)
-//    })
-//  }
-//
-//  /** Computes the square of an integer.
-//   *  This demonstrates unit testing.
-//   */
-//  def square(x: Int): Int = x*x
 }
 
-//@JSExport
-//class ColumnDef(field: String, label: String)
-//
-//@JSExport
-//class Columns(columns: Array[ColumnDef])
