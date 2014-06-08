@@ -9,6 +9,23 @@ import js.Dynamic.{global => g, newInstance => jsnew, literal => lit}
 @JSName("THREE.Scene")
 class ThreeScene
 
+@JSName("BorderContainer")
+trait BorderContainer extends js.Object {
+  val id: String = ???
+}
+
+@JSName("ContentPane")
+trait ContentPane extends js.Object {
+  val id: String = ???
+  val region: String = ???
+  var selected: Boolean = ???
+  val title: String = ???
+}
+
+object ContentPane {
+  def apply(id: String)(implicit contentPane: js.Dynamic) = jsnew(contentPane)(id)
+}
+
 @JSName("Grid")
 trait OnDemandGrid extends js.Object {
   def renderArray(data: js.Object): Any = ???
@@ -18,16 +35,6 @@ trait OnDemandGrid extends js.Object {
   def revert(): Unit = ???
 
   val id: String = ???
-
-  def data(data: List[Map[String, Any]]): js.Object = {
-
-    val records: Seq[js.Dictionary[Any]] = data.map { m =>
-      js.Dictionary[Any](m.map(p => (p._1 -> p._2)).toSeq : _*)
-    }.toSeq
-    val rows = js.Array(records: _*)
-
-    rows
-  }
 }
 
 object OnDemandGrid {
@@ -102,12 +109,6 @@ object ScalaJSExample {
       (grid: js.Dynamic) =>
 
         val odg = OnDemandGrid("grid3", List(ColumnDef("name", "Name"), ColumnDef("rank", "Rank"), ColumnDef("serial", "Serial Number")))(grid)
-
-//      val data = Array(
-//        js.Dynamic.literal(name = "Fred", rank = "Barkers", serial = 89),
-//        js.Dynamic.literal(name = "Vanna", rank = "Blue", serial = 55),
-//        js.Dynamic.literal(name = "Pat", rank = "Sajak", serial = 65)
-//      )
 
       val army = Array(new Soldier("Fred", "Barkers", 89), new Soldier("Vanna", "Blue", 55),
         new Soldier("Pat", "Sajak", 65))
