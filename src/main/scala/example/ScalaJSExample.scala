@@ -100,27 +100,32 @@ object ScalaJSExample {
 
     g.require(Array[String]("dgrid/Grid", "dojo/domReady!"), {
       (grid: js.Dynamic) =>
-//        val gr = Grid("grid2", List(ColumnDef("first", "First Name"), ColumnDef("last", "Last Name"), ColumnDef("age", "Age")))(grid)
-//        gr.renderArray(List(Map("first" -> "Fred", "last" -> "Barkingdog", "age" -> 89),
-//          Map("first" -> "Vanna", "last" -> "Green", "age" -> 55)))
 
         val odg = OnDemandGrid("grid3", List(ColumnDef("name", "Name"), ColumnDef("rank", "Rank"), ColumnDef("serial", "Serial Number")))(grid)
 
+//      val data = Array(
+//        js.Dynamic.literal(name = "Fred", rank = "Barkers", serial = 89),
+//        js.Dynamic.literal(name = "Vanna", rank = "Blue", serial = 55),
+//        js.Dynamic.literal(name = "Pat", rank = "Sajak", serial = 65)
+//      )
 
-      val data = Array(
-        js.Dynamic.literal(name = "Fred", rank = "Barkers", serial = 89),
-        js.Dynamic.literal(name = "Vanna", rank = "Blue", serial = 55),
-        js.Dynamic.literal(name = "Pat", rank = "Sajak", serial = 65)
-      )
+      val army = Array(new Soldier("Fred", "Barkers", 89), new Soldier("Vanna", "Blue", 55),
+        new Soldier("Pat", "Sajak", 65))
 
-      odg.renderArray(data)
-//        odg.renderArray(List(Map("name" -> "Fred Jones", "rank" -> "Corporal", "serial" -> 123),
-//          Map("name" -> "Grace Hopper", "rank" -> "Admiral", "serial" -> 111)))
-////        odg.renderArray(odg.data(List(Map("first" -> "Fred", "last" -> "Barkingdog", "age" -> 89),
-////          Map("first" -> "Vanna", "last" -> "Green", "age" -> 55))))
-        g.console.log(odg.id)
+      odg.renderArray(army)
+      g.console.log(odg.id)
     })
 
   }
 }
+
+  @JSExport
+  class Soldier(val _name: String, val _rank: String, val _serial: Int) {
+    @JSExport
+    val name = _name
+    @JSExport
+    val rank = _rank
+    @JSExport
+    val serial = _serial
+  }
 
