@@ -41,7 +41,7 @@ case class ColumnDef(fieldName: String, title: String)
 @JSExport
 object ScalaJSExample {
   @JSExport
-  def main(grid: js.Dynamic): Unit = {
+  def main(): Unit = {
     val paragraph = g.document.createElement("p")
     paragraph.innerHTML = s"<strong>It worked!</strong>"
     g.document.getElementById("playground").appendChild(paragraph)
@@ -83,9 +83,12 @@ object ScalaJSExample {
         cont1.startup()
     })
 
-    val gr = Grid("grid2", List(ColumnDef("first", "First Name"), ColumnDef("last", "Last Name"), ColumnDef("age", "Age")))(grid)
-    gr.renderArray(List(Map("first" -> "Fred", "last" -> "Barkingdog", "age" -> 89),
-        Map("first" -> "Vanna", "last" -> "Green", "age" -> 55)))
+    g.require(Array[String]("dgrid/Grid", "dojo/domReady!"), {
+      (grid: js.Dynamic) =>
+        val gr = Grid("grid2", List(ColumnDef("first", "First Name"), ColumnDef("last", "Last Name"), ColumnDef("age", "Age")))(grid)
+        gr.renderArray(List(Map("first" -> "Fred", "last" -> "Barkingdog", "age" -> 89),
+          Map("first" -> "Vanna", "last" -> "Green", "age" -> 55)))
+    })
 
   }
 }
