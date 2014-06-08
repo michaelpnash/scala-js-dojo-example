@@ -27,13 +27,9 @@ See README.md for detailed explanations.</p>
 <script type="text/javascript" src="./target/scala-2.11/scalajsdojoexample-pack-app.js"></script>
 
 <script type="text/javascript">
-
-  function Apple (type, color) {
-        this.type = type;
-        this.color = "red";
-  }
-
-ScalaJSExample().main();
+  require(["dgrid/Grid", "dojo/domReady!"], function(Grid) {
+      ScalaJSExample().main(Grid);
+   });
 </script>
 
 

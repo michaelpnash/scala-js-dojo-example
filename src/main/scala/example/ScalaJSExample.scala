@@ -13,23 +13,16 @@ trait OnDemandGrid extends js.Object {
   def renderArray(data: Any) = ???
 }
 
-case class Grid(id: String, columns: List[ColumnDef]) {
-  private var wrapped: OnDemandGrid = null
-  g.require(Array[String]("dgrid/Grid", "dojo/domReady!"), {
-    (grid: js.Dynamic, ready: js.Dynamic) =>
+case class Grid(id: String, columns: List[ColumnDef])(implicit grid: js.Dynamic) {
+  private var wrapped: js.Dynamic = null
 
-      val rows = js.Array(js.Dictionary("first" -> "Fred", "last" -> "Barking", "age" -> 89),
-        js.Dictionary("first" -> "Vanna", "last" -> "Green", "age" -> 55))
+      //val rows = js.Array(js.Dictionary("first" -> "Fred", "last" -> "Barking", "age" -> 89),
+      //  js.Dictionary("first" -> "Vanna", "last" -> "Green", "age" -> 55))
 
       val cols = js.Dictionary("columns" -> js.Dictionary(columns.map(col => (col.fieldName, col.title)): _*))
       val gr = jsnew(grid)(cols, id)
-      gr.renderArray(rows)
-
-      ready({
-        dom.alert("Ready!")
-        wrapped = gr.asInstanceOf[OnDemandGrid]
-      })
-  })
+      //gr.renderArray(rows)
+      wrapped = gr
 
   def renderArray(data: List[Map[String, Any]]) = {
     require(wrapped != null)
@@ -37,10 +30,9 @@ case class Grid(id: String, columns: List[ColumnDef]) {
 
     val rows = js.Array(records: _*)
 
-    g.console.log(wrapped)
-     val rows2 = js.Array(js.Dictionary("first" -> "Fred", "last" -> "Barking", "age" -> 89),
+    val rows2 = js.Array(js.Dictionary("first" -> "Fred", "last" -> "Barking", "age" -> 89),
         js.Dictionary("first" -> "Vanna", "last" -> "Green", "age" -> 55))
-    wrapped.renderArray(rows2)
+     wrapped.renderArray(rows2)
   }
 }
 
@@ -49,7 +41,7 @@ case class ColumnDef(fieldName: String, title: String)
 @JSExport
 object ScalaJSExample {
   @JSExport
-  def main(): Unit = {
+  def main(grid: js.Dynamic): Unit = {
     val paragraph = g.document.createElement("p")
     paragraph.innerHTML = s"<strong>It worked!</strong>"
     g.document.getElementById("playground").appendChild(paragraph)
@@ -91,8 +83,8 @@ object ScalaJSExample {
         cont1.startup()
     })
 
-    val gr = Grid("grid2", List(ColumnDef("first", "First Name"), ColumnDef("last", "Last Name"), ColumnDef("age", "Age")))
-    gr.renderArray(List(Map("first" -> "Fred", "last" -> "Barking", "age" -> 89),
+    val gr = Grid("grid2", List(ColumnDef("first", "First Name"), ColumnDef("last", "Last Name"), ColumnDef("age", "Age")))(grid)
+    gr.renderArray(List(Map("first" -> "Fred", "last" -> "Barkingdog", "age" -> 89),
         Map("first" -> "Vanna", "last" -> "Green", "age" -> 55)))
 
   }
