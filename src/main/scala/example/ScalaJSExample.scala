@@ -26,13 +26,19 @@ case class Grid(id: String, columns: List[ColumnDef])(implicit grid: js.Dynamic)
 
   def renderArray(data: List[Map[String, Any]]) = {
     require(wrapped != null)
-    val records = data.map(m => m.map(pair => (pair._1, pair._2)))
+    //val records = data.map(m => m.map(pair => (pair._1, pair._2)))
 
+    //val rows = js.Array(records: _*)
+
+    val records: Seq[js.Dictionary[Any]] = data.map { m =>
+      js.Dictionary[Any](m.map(p => (p._1 -> p._2)).toSeq : _*)
+    }.toSeq
     val rows = js.Array(records: _*)
 
     val rows2 = js.Array(js.Dictionary("first" -> "Fred", "last" -> "Barking", "age" -> 89),
         js.Dictionary("first" -> "Vanna", "last" -> "Green", "age" -> 55))
-     wrapped.renderArray(rows2)
+
+     wrapped.renderArray(rows)
   }
 }
 
@@ -61,8 +67,6 @@ object ScalaJSExample {
     val scene = (new ThreeScene).asInstanceOf[js.Dynamic]
 
     val threeS = scene.asInstanceOf[ThreeScene]
-
-    // dom.alert("Here")
 
 
     val bc = dom.document.createElement("div")
