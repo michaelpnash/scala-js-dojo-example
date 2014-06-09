@@ -9,13 +9,17 @@ import js.Dynamic.{global => g, newInstance => jsnew, literal => lit}
 @JSName("THREE.Scene")
 class ThreeScene
 
+trait DojoComponent extends js.Object {
+  def addChild(child: DojoComponent) = ???
+}
+
 @JSName("BorderContainer")
-trait BorderContainer extends js.Object {
+trait BorderContainer extends DojoComponent {
   val id: String = ???
 }
 
 @JSName("ContentPane")
-trait ContentPane extends js.Object {
+trait ContentPane extends DojoComponent {
   val id: String = ???
   val region: String = ???
   var selected: Boolean = ???
@@ -27,7 +31,7 @@ object ContentPane {
 }
 
 @JSName("Grid")
-trait OnDemandGrid extends js.Object {
+trait OnDemandGrid extends DojoComponent {
   def renderArray(data: js.Object): Any = ???
 
   def save(): Unit = ???
