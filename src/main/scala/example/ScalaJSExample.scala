@@ -76,7 +76,9 @@ object ScalaJSExample {
     bc.id = "bordercontainer"
     dom.document.body.appendChild(bc)
 
-    g.require(Array[String]("dijit/layout/BorderContainer", "dijit/layout/ContentPane",
+    g.require(Array[String]("dijit/layout/BorderContainer",
+      "dijit/layout/ContentPane",
+      "dgrid/Grid",
       "dojo/domReady!"), {
       (borderContainer: js.Dynamic, contentPane: js.Dynamic) =>
         val cont1 = jsnew(borderContainer)({}, "bordercontainer")
@@ -88,30 +90,25 @@ object ScalaJSExample {
         top.region = "top"
         cont1.addChild(top)
         cont1.startup()
-    })
-
-    g.require(Array[String]("dgrid/Grid", "dojo/domReady!"), {
-      (grid: js.Dynamic) =>
 
         val odg = OnDemandGrid("grid3", List(ColumnDef("name", "Name"), ColumnDef("rank", "Rank"), ColumnDef("serial", "Serial Number")))(grid)
 
-      val army = Array(new Soldier("Fred", "Barkers", 89), new Soldier("Vanna", "Blue", 55),
-        new Soldier("Pat", "Sajak", 65))
+        val army = Array(new Soldier("Fred", "Barkers", 89), new Soldier("Vanna", "Blue", 55),
+          new Soldier("Pat", "Sajak", 65))
 
-      odg.renderArray(army)
-      g.console.log(odg.id)
+        odg.renderArray(army)
     })
 
   }
 }
 
+@JSExport
+class Soldier(val _name: String, val _rank: String, val _serial: Int) {
   @JSExport
-  class Soldier(val _name: String, val _rank: String, val _serial: Int) {
-    @JSExport
-    val name = _name
-    @JSExport
-    val rank = _rank
-    @JSExport
-    val serial = _serial
-  }
+  val name = _name
+  @JSExport
+  val rank = _rank
+  @JSExport
+  val serial = _serial
+}
 
