@@ -18,6 +18,10 @@ trait BorderContainer extends DojoComponent {
   val id: String = ???
 }
 
+object BorderContainer extends DojoComponent {
+  def apply(id: String)(implicit borderContainer: js.Dynamic) = jsnew(borderContainer)(id)
+}
+
 @JSName("ContentPane")
 trait ContentPane extends DojoComponent {
   val id: String = ???
@@ -81,7 +85,7 @@ object ScalaJSExample {
       "dgrid/Grid",
       "dojo/domReady!"), {
       (borderContainer: js.Dynamic, contentPane: js.Dynamic) =>
-        val cont1 = jsnew(borderContainer)({}, "bordercontainer")
+        val cont1 = BorderContainer("bordercontainer")(borderContainer)
         val pp = dom.document.createElement("p")
         pp.innerHTML = "testing, testing"
         cont1.domNode.appendChild(pp)
