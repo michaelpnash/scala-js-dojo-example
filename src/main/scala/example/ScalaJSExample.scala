@@ -5,33 +5,36 @@ import js.annotation.JSExport
 import org.scalajs.dom
 import scala.scalajs.js.annotation.JSName
 import js.Dynamic.{global => g, newInstance => jsnew, literal => lit}
+import org.scalajs.dom.HTMLElement
 
 @JSName("THREE.Scene")
 class ThreeScene
 
 trait DojoComponent extends js.Object {
-  def addChild(child: DojoComponent) = ???
+  def addChild(child: DojoComponent): Unit = ???
+  def domNode: HTMLElement = ???
 }
 
 @JSName("BorderContainer")
 trait BorderContainer extends DojoComponent {
   val id: String = ???
+  def startup(): Unit = ???
 }
 
 object BorderContainer extends DojoComponent {
-  def apply(id: String)(implicit borderContainer: js.Dynamic) = jsnew(borderContainer)(id)
+  def apply(parent: String)(implicit borderContainer: js.Dynamic) = jsnew(borderContainer)(js.Dictionary("id" -> parent), parent).asInstanceOf[BorderContainer]
 }
 
 @JSName("ContentPane")
 trait ContentPane extends DojoComponent {
   val id: String = ???
-  val region: String = ???
+  var region: String = ???
   var selected: Boolean = ???
   val title: String = ???
 }
 
 object ContentPane {
-  def apply(id: String)(implicit contentPane: js.Dynamic) = jsnew(contentPane)(id)
+  def apply(id: String)(implicit contentPane: js.Dynamic) = jsnew(contentPane)(js.Dictionary("id" -> id)).asInstanceOf[ContentPane]
 }
 
 @JSName("Grid")
@@ -79,26 +82,42 @@ object ScalaJSExample {
     val bc = dom.document.createElement("div")
     bc.id = "bordercontainer"
     dom.document.body.appendChild(bc)
+    bc.innerHTML = "<p>bordercontainer div</p>"
+
+     val bc2 = dom.document.createElement("div")
+    bc2.id = "bc2"
+    dom.document.body.appendChild(bc2)
 
     g.require(Array[String]("dijit/layout/BorderContainer",
       "dijit/layout/ContentPane",
       "dgrid/Grid",
       "dojo/domReady!"), {
-      (borderContainer: js.Dynamic, contentPane: js.Dynamic) =>
-        val cont1 = BorderContainer("bordercontainer")(borderContainer)
-        val pp = dom.document.createElement("p")
-        pp.innerHTML = "testing, testing"
-        cont1.domNode.appendChild(pp)
+      (borderContainer: js.Dynamic, contentPane: js.Dynamic, grid: js.Dynamic) =>
+        val cont2 = jsnew(borderContainer)(js.Dictionary(), "bordercontainer").asInstanceOf[BorderContainer]
+        //val cont2 = BorderContainer("bc2")(borderContainer)
 
-        val top = jsnew(contentPane)()
+//        val pp = dom.document.createElement("p")
+//        pp.innerHTML = "testing, testing"
+//        cont2.domNode.appendChild(pp)
+
+        //g.console.log("Inner contt2:" + cont2.domNode.innerHTML)
+
+        val top = ContentPane("top")(contentPane)
         top.region = "top"
-        cont1.addChild(top)
-        cont1.startup()
+        top.domNode.innerHTML = "<p>top</p>"
+        g.console.log("Region of top:" + top.region)
+        cont2.addChild(top)
+
+        val center = ContentPane("center")(contentPane)
+        center.region = "center"
+        cont2.addChild(center)
+        cont2.startup()
 
         val odg = OnDemandGrid("grid3", List(ColumnDef("name", "Name"), ColumnDef("rank", "Rank"), ColumnDef("serial", "Serial Number")))(grid)
 
         val army = Array(new Soldier("Fred", "Barkers", 89), new Soldier("Vanna", "Blue", 55),
           new Soldier("Pat", "Sajak", 65))
+        center.addChild(odg)
 
         odg.renderArray(army)
     })
