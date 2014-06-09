@@ -30,7 +30,7 @@ trait ContentPane extends DojoComponent {
   val id: String = ???
   var region: String = ???
   var selected: Boolean = ???
-  val title: String = ???
+  var title: String = ???
 }
 
 object ContentPane {
@@ -48,10 +48,18 @@ trait OnDemandGrid extends DojoComponent {
   val id: String = ???
 }
 
+@JSName("TabContainer")
+trait TabContainer extends DojoComponent {
+  val id: String = ???
+}
+
+object TabContainer {
+  def apply(region: String)(tabContainer: js.Dynamic) = jsnew(tabContainer)(js.Dictionary("region" -> region)).asInstanceOf[TabContainer]
+}
+
 object OnDemandGrid {
   def apply(id: String, columns: List[ColumnDef])(implicit grid: js.Dynamic) =
     jsnew(grid)(js.Dictionary("columns" -> js.Dictionary(columns.map(col => (col.fieldName, col.title)): _*)), id).asInstanceOf[OnDemandGrid]
-
 }
 
 case class ColumnDef(fieldName: String, title: String)
@@ -60,40 +68,22 @@ case class ColumnDef(fieldName: String, title: String)
 object ScalaJSExample {
   @JSExport
   def main(): Unit = {
-    val paragraph = g.document.createElement("p")
-    paragraph.innerHTML = s"<strong>It worked!</strong>"
-    g.document.getElementById("playground").appendChild(paragraph)
-
-    val pp = dom.document.createElement("p")
-
-    val playground = g.document.getElementById("playground")
-    List(1, 2, 3).foreach {
-      i =>
-        val elem = g.document.createElement("p")
-        elem.innerHTML = s"Here is $i"
-        playground.appendChild(elem)
-    }
-
-    val scene = (new ThreeScene).asInstanceOf[js.Dynamic]
-
-    val threeS = scene.asInstanceOf[ThreeScene]
 
     val bc = dom.document.createElement("div")
     bc.id = "bordercontainer"
     dom.document.body.appendChild(bc)
-    bc.innerHTML = "<p>bordercontainer div</p>"
+    bc.style.height = "100%"
 
      val bc2 = dom.document.createElement("div")
     bc2.id = "bc2"
     dom.document.body.appendChild(bc2)
 
-    def makeBc(id: String, bc: js.Dynamic): BorderContainer = jsnew(bc)(js.Dictionary(), id).asInstanceOf[BorderContainer]
-
     g.require(Array[String]("dijit/layout/BorderContainer",
       "dijit/layout/ContentPane",
       "dgrid/Grid",
+      "dijit/layout/TabContainer",
       "dojo/domReady!"), {
-      (bc: js.Dynamic, contentPane: js.Dynamic, grid: js.Dynamic) =>
+      (bc: js.Dynamic, contentPane: js.Dynamic, grid: js.Dynamic, tabContainer: js.Dynamic) =>
         val cont2 = BorderContainer("bordercontainer")(bc)
 
         val top = ContentPane("top")(contentPane)
@@ -106,6 +96,13 @@ object ScalaJSExample {
         center.region = "center"
         cont2.addChild(center)
         cont2.startup()
+//
+//        val tabs = TabContainer("t")(tabContainer)
+//        val tabOne = ContentPane("tc")(contentPane)
+//        tabOne.title = "One"
+//        tabs.addChild(tabOne)
+//
+//        cont2.addChild(tabs)
 
         val odg = OnDemandGrid("grid3", List(ColumnDef("name", "Name"), ColumnDef("rank", "Rank"), ColumnDef("serial", "Serial Number")))(grid)
 
