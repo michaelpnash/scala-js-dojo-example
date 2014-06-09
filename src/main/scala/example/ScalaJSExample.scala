@@ -21,8 +21,8 @@ trait BorderContainer extends DojoComponent {
   def startup(): Unit = ???
 }
 
-object BorderContainer extends DojoComponent {
-  def apply(parent: String)(implicit borderContainer: js.Dynamic) = jsnew(borderContainer)(js.Dictionary("id" -> parent), parent).asInstanceOf[BorderContainer]
+object BorderContainer {
+  def apply(id: String)(implicit borderContainer: js.Dynamic) = jsnew(borderContainer)(js.Dictionary(), id).asInstanceOf[BorderContainer]
 }
 
 @JSName("ContentPane")
@@ -78,7 +78,6 @@ object ScalaJSExample {
 
     val threeS = scene.asInstanceOf[ThreeScene]
 
-
     val bc = dom.document.createElement("div")
     bc.id = "bordercontainer"
     dom.document.body.appendChild(bc)
@@ -88,19 +87,14 @@ object ScalaJSExample {
     bc2.id = "bc2"
     dom.document.body.appendChild(bc2)
 
+    def makeBc(id: String, bc: js.Dynamic): BorderContainer = jsnew(bc)(js.Dictionary(), id).asInstanceOf[BorderContainer]
+
     g.require(Array[String]("dijit/layout/BorderContainer",
       "dijit/layout/ContentPane",
       "dgrid/Grid",
       "dojo/domReady!"), {
-      (borderContainer: js.Dynamic, contentPane: js.Dynamic, grid: js.Dynamic) =>
-        val cont2 = jsnew(borderContainer)(js.Dictionary(), "bordercontainer").asInstanceOf[BorderContainer]
-        //val cont2 = BorderContainer("bc2")(borderContainer)
-
-//        val pp = dom.document.createElement("p")
-//        pp.innerHTML = "testing, testing"
-//        cont2.domNode.appendChild(pp)
-
-        //g.console.log("Inner contt2:" + cont2.domNode.innerHTML)
+      (bc: js.Dynamic, contentPane: js.Dynamic, grid: js.Dynamic) =>
+        val cont2 = BorderContainer("bordercontainer")(bc)
 
         val top = ContentPane("top")(contentPane)
         top.region = "top"
