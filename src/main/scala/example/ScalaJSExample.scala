@@ -104,7 +104,7 @@ object ScalaJSExample {
 
         val top = ContentPane("top")(contentPane)
         top.region = "top"
-        top.domNode.innerHTML = "<p>top</p>"
+        top.domNode.innerHTML = "<h1>Dojo Scala.js application - development version</h1>"
         g.console.log("Region of top:" + top.region)
         cont2.addChild(top)
 
