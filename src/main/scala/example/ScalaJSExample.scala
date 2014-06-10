@@ -80,30 +80,33 @@ object ScalaJSExample {
       "dijit/layout/TabContainer",
       "dojo/domReady!"), {
       (bc: js.Dynamic, contentPane: js.Dynamic, grid: js.Dynamic, tabContainer: js.Dynamic) =>
-        val cont2 = BorderContainer("bordercontainer")(bc)
+        val container = BorderContainer("bordercontainer")(bc)
 
         val top = ContentPane("top")(contentPane)
         top.region = "top"
         top.domNode.innerHTML = "<h1>Dojo Scala.js application - development version</h1>"
-        g.console.log("Region of top:" + top.region)
-        cont2.addChild(top)
+        container.addChild(top)
 
         val center = ContentPane("center")(contentPane)
         center.region = "center"
-        cont2.addChild(center)
-
+        container.addChild(center)
 
         val tabs = TabContainer("t")(tabContainer)
         val tabOne = ContentPane("tc")(contentPane)
         tabOne.title = "One"
 
+        val tabTwo = ContentPane("t2")(contentPane)
+        tabTwo.title = "Two"
+        tabTwo.domNode.innerHTML = "<p>Two</p>"
+
         center.addChild(tabs)
 
         tabs.addChild(tabOne)
+        tabs.addChild(tabTwo)
 
-        cont2.addChild(center)
+        container.addChild(center)
 
-        cont2.startup()
+        container.startup()
 
         val odg = OnDemandGrid("grid3", List(ColumnDef("name", "Name"), ColumnDef("rank", "Rank"), ColumnDef("serial", "Serial Number")))(grid)
 
