@@ -1,11 +1,9 @@
 package dijit.layout
 
 import scala.scalajs.js
-import scala.scalajs.js.annotation.JSName
 import js.Dynamic.{global => g, newInstance => jsnew, literal => lit}
 import dojo.DojoComponent
 
-@JSName("ContentPane")
 trait ContentPane extends DojoComponent {
   val id: String = ???
   var region: String = ???
