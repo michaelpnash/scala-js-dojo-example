@@ -74,10 +74,6 @@ object ScalaJSExample {
     dom.document.body.appendChild(bc)
     bc.style.height = "100%"
 
-     val bc2 = dom.document.createElement("div")
-    bc2.id = "bc2"
-    dom.document.body.appendChild(bc2)
-
     g.require(Array[String]("dijit/layout/BorderContainer",
       "dijit/layout/ContentPane",
       "dgrid/Grid",
