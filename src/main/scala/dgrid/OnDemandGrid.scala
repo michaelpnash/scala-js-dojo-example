@@ -5,7 +5,6 @@ import scala.scalajs.js.annotation.JSName
 import js.Dynamic.{global => g, newInstance => jsnew, literal => lit}
 import dojo.DojoComponent
 
-@JSName("Grid")
 trait OnDemandGrid extends DojoComponent {
   def renderArray(data: js.Object): Any = ???
 
