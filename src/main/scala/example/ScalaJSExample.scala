@@ -91,20 +91,25 @@ object ScalaJSExample {
         val center = ContentPane("center")(contentPane)
         center.region = "center"
         cont2.addChild(center)
-        cont2.startup()
+
 
         val tabs = TabContainer("t")(tabContainer)
         val tabOne = ContentPane("tc")(contentPane)
         tabOne.title = "One"
+
+        center.addChild(tabs)
+
         tabs.addChild(tabOne)
 
-        cont2.addChild(tabs)
+        cont2.addChild(center)
+
+        cont2.startup()
 
         val odg = OnDemandGrid("grid3", List(ColumnDef("name", "Name"), ColumnDef("rank", "Rank"), ColumnDef("serial", "Serial Number")))(grid)
 
         val army = Array(new Soldier("Fred", "Barkers", 89), new Soldier("Vanna", "Blue", 55),
           new Soldier("Pat", "Sajak", 65))
-        center.addChild(odg)
+        tabOne.addChild(odg)
 
         odg.renderArray(army)
     })
