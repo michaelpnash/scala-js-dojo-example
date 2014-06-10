@@ -3,14 +3,9 @@ package example
 import scala.scalajs.js
 import js.annotation.JSExport
 import org.scalajs.dom
-import scala.scalajs.js.annotation.JSName
-import js.Dynamic.{global => g, newInstance => jsnew, literal => lit}
-import org.scalajs.dom.HTMLElement
+import js.Dynamic.{global => g}
 import dgrid.{OnDemandGrid, ColumnDef}
 import dijit.layout.{BorderContainer, ContentPane, TabContainer}
-
-@JSName("THREE.Scene")
-class ThreeScene
 
 @JSExport
 object ScalaJSExample {
@@ -23,9 +18,9 @@ object ScalaJSExample {
     bc.style.height = "700px"
 
     g.require(Array[String](BorderContainer.require,
-      "dijit/layout/ContentPane",
-      "dgrid/Grid",
-      "dijit/layout/TabContainer",
+      ContentPane.require,
+      OnDemandGrid.require,
+      TabContainer.require,
       "dojo/domReady!"), {
       (bc: js.Dynamic, contentPane: js.Dynamic, grid: js.Dynamic, tabContainer: js.Dynamic) =>
         val container = BorderContainer("bordercontainer")(bc)

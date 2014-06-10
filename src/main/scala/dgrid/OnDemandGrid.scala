@@ -18,6 +18,7 @@ trait OnDemandGrid extends DojoComponent {
 object OnDemandGrid {
   def apply(id: String, columns: List[ColumnDef])(implicit grid: js.Dynamic) =
     jsnew(grid)(js.Dictionary("columns" -> js.Dictionary(columns.map(col => (col.fieldName, col.title)): _*)), id).asInstanceOf[OnDemandGrid]
+  val require = "dgrid/Grid"
 }
 
 case class ColumnDef(fieldName: String, title: String)
