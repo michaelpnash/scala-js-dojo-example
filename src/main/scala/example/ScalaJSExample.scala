@@ -72,7 +72,7 @@ object ScalaJSExample {
     val bc = dom.document.createElement("div")
     bc.id = "bordercontainer"
     dom.document.body.appendChild(bc)
-    bc.style.height = "100%"
+    bc.style.height = "700px"
 
     g.require(Array[String]("dijit/layout/BorderContainer",
       "dijit/layout/ContentPane",
@@ -92,13 +92,13 @@ object ScalaJSExample {
         center.region = "center"
         cont2.addChild(center)
         cont2.startup()
-//
-//        val tabs = TabContainer("t")(tabContainer)
-//        val tabOne = ContentPane("tc")(contentPane)
-//        tabOne.title = "One"
-//        tabs.addChild(tabOne)
-//
-//        cont2.addChild(tabs)
+
+        val tabs = TabContainer("t")(tabContainer)
+        val tabOne = ContentPane("tc")(contentPane)
+        tabOne.title = "One"
+        tabs.addChild(tabOne)
+
+        cont2.addChild(tabs)
 
         val odg = OnDemandGrid("grid3", List(ColumnDef("name", "Name"), ColumnDef("rank", "Rank"), ColumnDef("serial", "Serial Number")))(grid)
 
