@@ -4,33 +4,18 @@
   <title>Example Scala.js Dojo application</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <script src="dojo-config.js"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/dojo/1.9.3/dojo/dojo.js"></script>
+  <link rel="stylesheet" href="dgrid/css/dgrid.css"/>
+  <link rel="stylesheet" href="dojo/resources/dojo.css"/>
+  <link rel="stylesheet" href="dijit/themes/claro/claro.css"/>
+  <link rel="stylesheet" href="dojox/grid/resources/Grid.css"/>
+  <script src="//ajax.googleapis.com/ajax/libs/dojo/1.9.3/dojo/dojo.js"></script>
 </head>
 <body>
-
-<h1>ScalaJS Dojo - optimized version</h1>
-
-<p>After having compiled and optimized properly the code for the application
-(using `sbt optimizeJS`), you should see "It works" below.
-See README.md for detailed explanations.</p>
-
-<div id="playground">
-</div>
-
-<div id="grid2">
-</div>
 
 <script type="text/javascript" src="./target/scala-2.11/scalajsdojoexample-opt.js"></script>
 
 <script type="text/javascript">
-
-function Apple (type, color) {
-    this.type = type;
-    this.color = color;
-}
-
-
-ScalaJSExample().main();
+  ScalaJSExample().main();
 </script>
 
 </body>
