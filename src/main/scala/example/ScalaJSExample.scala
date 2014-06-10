@@ -67,9 +67,8 @@ object ScalaJSExample {
 
         odg.renderArray(army)
 
-      g.console.log("JsonRest:" + jsonRest)
-      g.newinstance(jsonRest)
-        //val acctDataStore = JsonRest(new JsonRest.CreateOptions())(jsonRest)
+      //val acctDataStore = JsonRest(new JsonRest.CreateOptions())(jsonRest)
+      g.console.log("At the end")
     })
 
   }
