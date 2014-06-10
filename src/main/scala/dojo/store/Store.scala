@@ -2,7 +2,7 @@ package dojo.store
 
 import dojo.DojoComponent
 
-trait Store[T, K] extends DojoComponent 
+trait Store[T, K] extends DojoComponent
 
 //                         queryEngine(query: String, options?: QueryOptions): QueryEngine<T>;
 //                         queryEngine(query: AttributesMap, options?: QueryOptions): QueryEngine<T>;
@@ -26,24 +26,25 @@ trait Store[T, K] extends DojoComponent
 
 trait StoreAsync[T, K] extends Store[T, K] {
 
-//                         add(object: T, directives?: PutDirectives<T, K>): dojo.Promise<K>;
-//                         get(id: K): dojo.Promise<T>;
-//                         getChildren<V>(parent: T, options?: QueryOptions): dojo.Promise<QueryResults<V>>;
-//                         getIdentity(object: T): dojo.Promise<K>;
-//                         getMetadata(object: T): dojo.Promise<Object>;
-//                         put(object: T, directives?: PutDirectives<T, K>): dojo.Promise<K>;
-// 
-//                         query(query: String, options?: QueryOptions): dojo.Promise<QueryResults<T>>;
-//                         query(query: AttributesMap, options?: QueryOptions): dojo.Promise<QueryResults<T>>;
-//                         query(query: (item: T) => boolean, options?: QueryOptions): dojo.Promise<QueryResults<T>>;
-// 
-//                         remove(id: K): boolean;
-// 
-//                         transaction(): TransactionAsync;
-//                         Transaction: new () => TransactionAsync;
+  //                         add(object: T, directives?: PutDirectives<T, K>): dojo.Promise<K>;
+  //                         get(id: K): dojo.Promise<T>;
+  //                         getChildren<V>(parent: T, options?: QueryOptions): dojo.Promise<QueryResults<V>>;
+  //                         getIdentity(object: T): dojo.Promise<K>;
+  //                         getMetadata(object: T): dojo.Promise<Object>;
+  //                         put(object: T, directives?: PutDirectives<T, K>): dojo.Promise<K>;
+  //
+  //                         query(query: String, options?: QueryOptions): dojo.Promise<QueryResults<T>>;
+  //                         query(query: AttributesMap, options?: QueryOptions): dojo.Promise<QueryResults<T>>;
+  //                         query(query: (item: T) => boolean, options?: QueryOptions): dojo.Promise<QueryResults<T>>;
+  //
+  //                         remove(id: K): boolean;
+  //
+  //                         transaction(): TransactionAsync;
+  //                         Transaction: new () => TransactionAsync;
 }
 
-trait QueryEngine 
+trait QueryEngine
+
 //                         (query: String, options?: QueryOptions): (data: T[]) => T[];
 //                         (query: AttributesMap, options?: QueryOptions): (data: T[]) => T[];
 //                         (query: RegExp, options?: QueryOptions): (data: T[]) => T[];
@@ -53,16 +54,16 @@ trait QueryEngine
 
 
 trait PutDirectives[K, T] {
-    val id: K
-    val before: T
-    val parent: Object
-    val overwrite: Boolean
+  val id: K
+  val before: T
+  val parent: Object
+  val overwrite: Boolean
 }
 
 trait QueryOptions {
-      val start: Int
-      val count: Int
-      val sort: Array[SortInformation]
+  val start: Int
+  val count: Int
+  val sort: Array[SortInformation]
 }
 
 trait QueryResults[T] {
@@ -77,87 +78,67 @@ trait QueryResults[T] {
 //                         observe? (listener: (object: T, removedFrom: number, insertedInto: number) => void, includeAllUpdates?: boolean): Dojo.CancellableHandle;
 
 trait SortInformation {
-        val attribute: String
-        val descending: Boolean
+  val attribute: String
+  val descending: Boolean
 }
 
 trait Transaction {
-        //def abort(callback: Option[Function], thisObject?: Object): Boolean
-        //def commit(): Boolean
+  //def abort(callback: Option[Function], thisObject?: Object): Boolean
+  //def commit(): Boolean
 }
 
-                trait TransactionAsync {
-                        //abort(callback?: Function, thisObject?: Object): dojo.Promise<boolean>;
-                        //commit(): dojo.Promise<boolean>;
-                }
+trait TransactionAsync {
+  //abort(callback?: Function, thisObject?: Object): dojo.Promise<boolean>;
+  //commit(): dojo.Promise<boolean>;
+}
 
-                // Create options
+// Create options
 
-                trait CreateOptions extends DojoComponent {
-                }
+trait CreateOptions extends DojoComponent {
+}
 
-                trait Memory {
-//                         interface CreateOptions<T extends Object> extends Dojo.Store.CreateOptions {
-//                                 data?: T[];
-//                         }
-//                         class Store<T extends Object, K> extends Dojo.Store.Store<T, K> implements CreateOptions<T>
-//                         {
-//                                 constructor(options: CreateOptions<T>);
-// 
-//                                 idProperty: String;
-//                                 data: T[];
-//                                 index: Dojo.Dictionary<number>;
-//                         }
-                }
+trait Memory {
+  //                         interface CreateOptions<T extends Object> extends Dojo.Store.CreateOptions {
+  //                                 data?: T[];
+  //                         }
+  //                         class Store<T extends Object, K> extends Dojo.Store.Store<T, K> implements CreateOptions<T>
+  //                         {
+  //                                 constructor(options: CreateOptions<T>);
+  //
+  //                                 idProperty: String;
+  //                                 data: T[];
+  //                                 index: Dojo.Dictionary<number>;
+  //                         }
+}
+
 object Memory {
   val require = "dojo/store/Memory"
 }
 
-                trait DataStore {
-                        trait CreateOptions {
-                                var target: String;
-                                var store: Object;         // Should be DojoDataStore, but needs to pull in dojo_data.ts and dojo.ts, so don't do it
-                        }
-                        //class Store[T, K] extends CreateOptions 
-                        //class StoreAsync[T, K] extends CreateOptions {
-                                //constructor(options: CreateOptions);
+trait DataStore {
 
-                        //        var target: String;
-                        //        var store: Object;
-                       // }
-                }
+  trait CreateOptions {
+    var target: String;
+    var store: Object; // Should be DojoDataStore, but needs to pull in dojo_data.ts and dojo.ts, so don't do it
+  }
 
-                object DataStore {
+  //class Store[T, K] extends CreateOptions
+  //class StoreAsync[T, K] extends CreateOptions {
+  //constructor(options: CreateOptions);
+
+  //        var target: String;
+  //        var store: Object;
+  // }
+}
+
+object DataStore {
   def require = "dojo/store/DataStore"
 }
 
-                trait JsonRest {
-                        trait CreateOptions {
-                                var target: String;
-                                var accepts: String;
-                                var ascendingPrefix: String;
-                                var descendingPrefix: String;
-                                var headers: Array[String]
-                        }
-
-                        object JsonRest { 
-                          val require = "dojo/store/JsonRest"
-                        }
-
-//                         class Store[T, K] extends StoreAsync[T, K] with CreateOptions {
-//                                 //constructor(options: CreateOptions);
-// 
-//                                 var target: String;
-//                                 var accepts: String;
-//                                 var ascendingPrefix: String;
-//                                 var descendingPrefix: String;
-//                                 var headers: Array[String]
-//                         }
-                }
 
 
 trait Observable {
-      //<T extends Object, K>(store: _Store<T, K>): _Store<T, K>;
+  //<T extends Object, K>(store: _Store<T, K>): _Store<T, K>;
 }
 
 object Observable {

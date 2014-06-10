@@ -6,6 +6,7 @@ import org.scalajs.dom
 import js.Dynamic.{global => g}
 import dgrid.{OnDemandGrid, ColumnDef}
 import dijit.layout.{BorderContainer, ContentPane, TabContainer}
+import dojo.store.JsonRest
 
 @JSExport
 object ScalaJSExample {
@@ -21,9 +22,15 @@ object ScalaJSExample {
       ContentPane.require,
       OnDemandGrid.require,
       TabContainer.require,
+      JsonRest.require,
       "dojo/domReady!"), {
-      (bc: js.Dynamic, contentPane: js.Dynamic, grid: js.Dynamic, tabContainer: js.Dynamic) =>
-        val container = BorderContainer("bordercontainer")(bc)
+      (borderContainer: js.Dynamic,
+       contentPane: js.Dynamic,
+       grid: js.Dynamic,
+       tabContainer: js.Dynamic,
+       jsonRest: js.Dynamic) =>
+
+        val container = BorderContainer("bordercontainer")(borderContainer)
 
         val top = ContentPane("top")(contentPane)
         top.region = "top"
@@ -59,6 +66,10 @@ object ScalaJSExample {
         tabOne.addChild(odg)
 
         odg.renderArray(army)
+
+      g.console.log("JsonRest:" + jsonRest)
+      g.newinstance(jsonRest)
+        //val acctDataStore = JsonRest(new JsonRest.CreateOptions())(jsonRest)
     })
 
   }
