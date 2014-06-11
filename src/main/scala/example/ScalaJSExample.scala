@@ -8,6 +8,7 @@ import dijit.layout.{BorderContainer, ContentPane, TabContainer}
 import dojo.store.JsonRest
 
 //import dojo.store.JsonRest
+
 import js.Dynamic.{global => g, newInstance => jsnew, literal => lit}
 
 @JSExport
@@ -62,7 +63,7 @@ object ScalaJSExample {
 
         container.startup()
 
-        val odg = OnDemandGrid("grid3", List(ColumnDef("name", "Name"), 
+        val odg = OnDemandGrid("grid3", List(ColumnDef("name", "Name"),
           ColumnDef("rank", "Rank"), ColumnDef("serial", "Serial Number")))(grid)
 
         val army = Array(new Soldier("Fred", "Barkers", 89), new Soldier("Vanna", "Blue", 55),
@@ -71,8 +72,8 @@ object ScalaJSExample {
 
         odg.renderArray(army)
 
-      val acctDataStore = JsonRest()(jsonRest)
-      g.console.log("At the end" + acctDataStore)
+        val acctDataStore = JsonRest()(jsonRest)
+        g.console.log("At the end" + acctDataStore)
     })
 
   }
