@@ -72,7 +72,7 @@ object ScalaJSExample {
 
         odg.renderArray(army)
 
-        val acctDataStore = JsonRest()(jsonRest)
+        val acctDataStore = JsonRest("foo/bar", "baz")(jsonRest)
         g.console.log("At the end" + acctDataStore)
     })
 
