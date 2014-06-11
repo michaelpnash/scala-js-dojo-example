@@ -3,10 +3,12 @@ package example
 import scala.scalajs.js
 import js.annotation.JSExport
 import org.scalajs.dom
-import js.Dynamic.{global => g}
 import dgrid.{OnDemandGrid, ColumnDef}
 import dijit.layout.{BorderContainer, ContentPane, TabContainer}
 import dojo.store.JsonRest
+
+//import dojo.store.JsonRest
+import js.Dynamic.{global => g, newInstance => jsnew, literal => lit}
 
 @JSExport
 object ScalaJSExample {
@@ -22,13 +24,15 @@ object ScalaJSExample {
       ContentPane.require,
       OnDemandGrid.require,
       TabContainer.require,
-      JsonRest.require,
+      "dojo/store/JsonRest",
+      "dojo/ready",
       "dojo/domReady!"), {
       (borderContainer: js.Dynamic,
        contentPane: js.Dynamic,
        grid: js.Dynamic,
        tabContainer: js.Dynamic,
-       jsonRest: js.Dynamic) =>
+       jsonRest: js.Dynamic,
+       ready: js.Dynamic) =>
 
         val container = BorderContainer("bordercontainer")(borderContainer)
 
@@ -67,8 +71,8 @@ object ScalaJSExample {
 
         odg.renderArray(army)
 
-      //val acctDataStore = JsonRest(new JsonRest.CreateOptions())(jsonRest)
-      g.console.log("At the end")
+      val acctDataStore = JsonRest()(jsonRest)
+      g.console.log("At the end" + acctDataStore)
     })
 
   }
