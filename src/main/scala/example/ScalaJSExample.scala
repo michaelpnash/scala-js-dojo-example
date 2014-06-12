@@ -3,9 +3,11 @@ package example
 import scala.scalajs.js
 import js.annotation.JSExport
 import org.scalajs.dom
-import dgrid.{OnDemandGrid, ColumnDef}
+import dgrid._
 import dijit.layout.{BorderContainer, ContentPane, TabContainer}
 import dojo.store.JsonRest
+import dgrid.extensions.{DijitRegistry, ColumnResizer}
+import dgrid.ColumnDef
 
 //import dojo.store.JsonRest
 
@@ -72,12 +74,14 @@ object ScalaJSExample {
 
         odg.renderArray(army)
 
-        val acctDataStore = JsonRest()(jsonRest)
-        g.console.log("At the end" + acctDataStore)
+        val acctDataStore = JsonRest("accounts.json", "accounts")(jsonRest)
+        //g.console.log("At the end" + acctDataStore)
     })
 
   }
 }
+
+trait CustomGrid extends OnDemandGrid with Keyboard with ColumnResizer with Selection with DijitRegistry with CellSelection
 
 @JSExport
 class Soldier(val _name: String, val _rank: String, val _serial: Int) {
