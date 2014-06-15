@@ -85,11 +85,8 @@ trait CustomGrid extends OnDemandGrid with Keyboard with ColumnResizer with Sele
 
 @JSExport
 class Soldier(val _name: String, val _rank: String, val _serial: Int) {
-  @JSExport
-  val name = _name
-  @JSExport
-  val rank = _rank
-  @JSExport
-  val serial = _serial
+  @JSExport val name = _name
+  @JSExport val rank = _rank
+  @JSExport val serial = _serial
 }
 
