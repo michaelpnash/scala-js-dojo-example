@@ -54,7 +54,6 @@ object ScalaJSExample {
 
         val tabTwo = ContentPane("t2")(contentPane)
         tabTwo.title = "Two"
-        tabTwo.domNode.innerHTML = "<p>Two</p>"
 
         center.addChild(tabs)
 
@@ -75,7 +74,8 @@ object ScalaJSExample {
         odg.renderArray(army)
 
         val acctDataStore = JsonRest("accounts.json", "accounts")(jsonRest)
-        //g.console.log("At the end" + acctDataStore)
+        val acctGrid = OnDemandGrid("accounts", List(ColumnDef("code", "Code")), acctDataStore)(grid)
+        tabTwo.addChild(acctGrid)
     })
 
   }
