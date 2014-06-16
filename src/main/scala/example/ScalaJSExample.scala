@@ -83,6 +83,7 @@ object ScalaJSExample {
 
 trait CustomGrid extends OnDemandGrid with Keyboard with ColumnResizer with Selection with DijitRegistry with CellSelection
 
+
 @JSExport
 class Soldier(val _name: String, val _rank: String, val _serial: Int) {
   @JSExport val name = _name
