@@ -20,20 +20,5 @@
    ScalaJSExample().main();
 </script>
 
-<script>
-     require(["dojo/_base/declare", "dgrid/Keyboard",
-                "dgrid/Selection", "dgrid/extensions/ColumnResizer", "dojo/store/JsonRest",
-                "dgrid/extensions/DijitRegistry", "dgrid/editor", "dojo/ready", "dijit/form/Checkbox",
-                "dijit/form/FilteringSelect", "dijit/form/TextBox", "dgrid/CellSelection",
-                "dijit/form/Select", "dojo/domReady!"],
-             function(declare, Keyboard, Selection, ColumnResizer, JsonRest,
-                DijitRegistry, editor, ready, CheckBox, FilteringSelect, TextBox, CellSelection, Select) {
-                console.log("initializing sample grid");
-                var dataStore = new JsonRest({
-                        target:"api/account/",
-                        idProperty: "code"
-                     });
-              });
-</script>
 </body>
 </html>

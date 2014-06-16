@@ -5,7 +5,7 @@ import js.annotation.JSExport
 import org.scalajs.dom
 import dgrid._
 import dijit.layout.{BorderContainer, ContentPane, TabContainer}
-import dojo.store.JsonRest
+import dojo.store.{DataStore, JsonRest}
 import dgrid.extensions.{DijitRegistry, ColumnResizer}
 import dgrid.ColumnDef
 
@@ -27,6 +27,7 @@ object ScalaJSExample {
       ContentPane.require,
       OnDemandGrid.require,
       TabContainer.require,
+      DijitRegistry.require,
       "dojo/store/JsonRest",
       "dojo/ready",
       "dojo/domReady!"), {
@@ -34,6 +35,7 @@ object ScalaJSExample {
        contentPane: js.Dynamic,
        grid: js.Dynamic,
        tabContainer: js.Dynamic,
+       registry: js.Dynamic,
        jsonRest: js.Dynamic,
        ready: js.Dynamic) =>
 
@@ -62,8 +64,6 @@ object ScalaJSExample {
 
         container.addChild(center)
 
-        container.startup()
-
         val odg = OnDemandGrid("grid3", List(ColumnDef("name", "Name"),
           ColumnDef("rank", "Rank"), ColumnDef("serial", "Serial Number")))(grid)
 
@@ -74,14 +74,22 @@ object ScalaJSExample {
         odg.renderArray(army)
 
         val acctDataStore = JsonRest("accounts.json", "code")(jsonRest)
-        val acctGrid = OnDemandGrid("accounts", List(ColumnDef("code", "Code")), acctDataStore)(grid)
+        val acctGrid = CustomGrid("accounts", List(ColumnDef("code", "Code")), acctDataStore)(grid, registry)
         tabTwo.addChild(acctGrid)
+
+        container.startup()
     })
 
   }
 }
 
-trait CustomGrid extends OnDemandGrid with Keyboard with ColumnResizer with Selection with DijitRegistry with CellSelection
+trait CustomGrid extends OnDemandGrid with DijitRegistry
+
+object CustomGrid {
+  def apply(id: String, columns: List[ColumnDef], store: DataStore)(grid: js.Dynamic, registry: js.Dynamic) =
+    jsnew(grid)(js.Dictionary("store" -> store,
+      "columns" -> js.Dictionary(columns.map(col => (col.fieldName, col.title)): _*)), id).asInstanceOf[CustomGrid]
+}
 
 
 @JSExport

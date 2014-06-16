@@ -9,6 +9,9 @@ trait ContentPane extends DojoComponent {
   var region: String = ???
   var selected: Boolean = ???
   var title: String = ???
+  def startup(): Unit = ???
+  def refresh(): Unit = ???
+  def resize(): Unit = ???
 }
 
 object ContentPane {
