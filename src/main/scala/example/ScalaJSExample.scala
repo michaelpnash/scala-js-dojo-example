@@ -73,7 +73,7 @@ object ScalaJSExample {
 
         odg.renderArray(army)
 
-        val acctDataStore = JsonRest("accounts.json", "accounts")(jsonRest)
+        val acctDataStore = JsonRest("accounts.json", "code")(jsonRest)
         val acctGrid = OnDemandGrid("accounts", List(ColumnDef("code", "Code")), acctDataStore)(grid)
         tabTwo.addChild(acctGrid)
     })
