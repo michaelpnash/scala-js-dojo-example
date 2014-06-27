@@ -29,7 +29,7 @@ class GridOptions(val _columns: List[ColumnDef], val _selectionMode: String = "s
 
 object OnDemandGrid {
   def apply(options: GridOptions, id: String)(implicit grid: js.Dynamic) = 
-      jsnew(grid)(options.asInstanceOf[js.Any])
+      jsnew(grid)(options.asInstanceOf[js.Any]).asInstanceOf[OnDemandGrid]
   def apply(id: String, columns: List[ColumnDef])(implicit grid: js.Dynamic) =
     jsnew(grid)(js.Dictionary("columns" -> js.Dictionary(
       columns.map(col => (col.fieldName, col.title)): _*)), id).asInstanceOf[OnDemandGrid]
